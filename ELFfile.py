@@ -538,6 +538,17 @@ class Elf():
     def get_name(self, offset):
         return self.data[offset:].split('\x00')[0]
 
+    def generate_symbol(self):
+        symbol = {}
+        for i, elf_sym in self.elf_syms:
+            name = self.get_name(self.strtab + elf_sym.st_name)
+            if name == '':
+                continue
+            if elf_sym.st_value == 0:
+                continue
+            symbol[name] = elf_sym.st_value
+        return symbol
+
     def generate_got_and_plt(self):
         got = {}
         for i, plt_sym in self.plt_syms:
@@ -564,6 +575,11 @@ class Elf():
             if (vma > elf_phdr.p_vaddr) & (vma < (elf_phdr.p_vaddr + elf_phdr.p_filesz)):
                 return vma - elf_phdr.p_vaddr + elf_phdr.p_offset
         return -1
+
+    # 返回给定字符串的虚拟地址。
+    def find_str(self, string):
+        index = self.data.find(string)
+        return self.offset2vma(index)
 
     def print_elf_info(self):
         print 'elf_ehdr:'
@@ -618,3 +634,11 @@ class Elf():
         self.got = {}
         self.got, self.plt = self.generate_got_and_plt()
 
+        self.symbol = {}
+        self.symbol = self.generate_symbol()
+
+'''
+if __name__ == '__main__':
+    elf = Elf('./test/libc-2.19.so')
+    print elf.symbol
+'''
