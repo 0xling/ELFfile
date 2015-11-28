@@ -576,6 +576,14 @@ class Elf():
                 return vma - elf_phdr.p_vaddr + elf_phdr.p_offset
         return -1
 
+    def get_code(self):
+        for i, elf_phdr in self.elf_phdrs:
+            if elf_phdr.p_type != PHDR_TYPE.PT_LOAD:
+                continue
+            if elf_phdr.p_offset == 0:
+                return self.data[0:elf_phdr.p_filesz]
+        return None
+
     # 返回给定字符串的虚拟地址。
     def find_str(self, string):
         index = self.data.find(string)
