@@ -476,7 +476,11 @@ class Elf():
                 self.dynamic_infos = self.generate_dynamic_infos()
 
         if self.dynamic_infos is None:
-            raise Exception('not find dynamic program header')
+            #raise Exception('not find dynamic program header')
+            self.is_static = True
+            return
+
+        self.is_static = False
 
         # .dyn.sym
         if ('SYMTAB' in self.dynamic_infos.keys()) & ('STRTAB' in self.dynamic_infos.keys()) & \
