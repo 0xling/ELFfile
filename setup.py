@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 setup(
       name="ELFfile",
-      version="0.1",
+      version="0.2",
       description="a ELF file parse tool",
       author="Ling",
       author_email='ling_pro@163.com',

@@ -544,12 +544,11 @@ class Elf():
         end = offset
         while self.data[end] != '\x00':
             end += 1
-        return self.data[offset:end-1]
+        return self.data[offset:end]
 
     def generate_symbol(self):
         symbol = {}
         for i, elf_sym in self.elf_syms:
-            print i
             name = self.get_name(self.strtab + elf_sym.st_name)
             if name == '':
                 continue
