@@ -540,11 +540,16 @@ class Elf():
             self.plt_syms.vsParse(data, rel_offset)
 
     def get_name(self, offset):
-        return self.data[offset:].split('\x00')[0]
+        #return self.data[offset:].split('\x00')[0]
+        end = offset
+        while self.data[end] != '\x00':
+            end += 1
+        return self.data[offset:end-1]
 
     def generate_symbol(self):
         symbol = {}
         for i, elf_sym in self.elf_syms:
+            print i
             name = self.get_name(self.strtab + elf_sym.st_name)
             if name == '':
                 continue
@@ -600,6 +605,8 @@ class Elf():
         print self.elf_phdrs.tree()
         print 'elf_shdrs:'
         print self.elf_shdrs.tree()
+        if self.is_static:
+            return
         print 'elf_dyns:'
         print self.elf_dyns.tree()
 
