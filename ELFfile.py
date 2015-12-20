@@ -572,7 +572,7 @@ class Elf():
         for i, elf_phdr in self.elf_phdrs:
             if elf_phdr.p_type != PHDR_TYPE.PT_LOAD:
                 continue
-            if (offset > elf_phdr.p_offset) & (offset < (elf_phdr.p_offset + elf_phdr.p_filesz)):
+            if (offset >= elf_phdr.p_offset) & (offset < (elf_phdr.p_offset + elf_phdr.p_filesz)):
                 return offset - elf_phdr.p_offset + elf_phdr.p_vaddr
         return -1
 
@@ -580,7 +580,7 @@ class Elf():
         for i, elf_phdr in self.elf_phdrs:
             if elf_phdr.p_type != PHDR_TYPE.PT_LOAD:
                 continue
-            if (vma > elf_phdr.p_vaddr) & (vma < (elf_phdr.p_vaddr + elf_phdr.p_filesz)):
+            if (vma >= elf_phdr.p_vaddr) & (vma < (elf_phdr.p_vaddr + elf_phdr.p_filesz)):
                 return vma - elf_phdr.p_vaddr + elf_phdr.p_offset
         return -1
 
